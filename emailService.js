@@ -1,17 +1,20 @@
 const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-        user: "sbcv32@gmail.com",
-        pass: "blic teyf arqj cxck", // Use an app password for security
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
     }
 });
 
 const sendLowStockAlert = (itemName, quantity) => {
     const mailOptions = {
-        from: "sbcv32@gmail.com",
-        to: "sbcv32@gmail.com",
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_TO,
         subject: `⚠ Low Stock Alert: ${itemName}`,
         html: `
             <h2 style="color: red;">🚨 Low Stock Alert! 🚨</h2>

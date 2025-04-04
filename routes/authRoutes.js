@@ -40,4 +40,32 @@ router.post("/login", (req, res) => {
     });
 });
 
+// User Registration Route
+router.post("/register", async (req, res) => {
+    const { email, password } = req.body;
+
+    // Check if the user already exists
+    db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: "Database error", error: err });
+        }
+        
+        if (results.length > 0) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        // Hash password before storing
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert new user into the database
+        db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, hashedPassword], (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: "Error registering user", error: err });
+            }
+            res.status(201).json({ message: "User registered successfully" });
+        });
+    });
+});
+
+
 module.exports = router;

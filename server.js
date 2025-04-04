@@ -1,15 +1,22 @@
 const mysql = require("mysql2");
 const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 5000;
+
+// Enable CORS for all routes
+app.use(cors());
 
 // Create MySQL connection
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "sanchit",       // Change this if needed
-    password: "pass@123",  // Change this if needed
-    database: "biomed_inventory"
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
 });
 
 // Connect to MySQL
@@ -21,7 +28,7 @@ db.connect((err) => {
     }
 });
 
-// ✅ Export `db` BEFORE requiring routes
+// Export `db` BEFORE requiring routes
 module.exports = db;
 
 // Middleware to parse JSON

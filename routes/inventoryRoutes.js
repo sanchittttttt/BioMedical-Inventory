@@ -17,7 +17,7 @@ router.get("/items", verifyToken, (req, res) => {
 });
 
 // POST route to add an item
-router.post("/items", (req, res) => {
+router.post("/items", verifyToken, (req, res) => {
     const { item_name, quantity, expiry_date } = req.body;
 
     const sql = "INSERT INTO inventory (item_name, quantity, expiry_date) VALUES (?, ?, ?)";
@@ -31,7 +31,7 @@ router.post("/items", (req, res) => {
 });
 
 // PUT route to update an item's quantity and trigger low stock alert
-router.put("/items/:id", (req, res) => {
+router.put("/items/:id", verifyToken, (req, res) => {
     const itemId = req.params.id;
     const { quantity } = req.body;
 
@@ -62,7 +62,7 @@ router.put("/items/:id", (req, res) => {
 });
 
 // DELETE route to remove an item by item_name
-router.delete("/items/:item_name", (req, res) => {
+router.delete("/items/:item_name", verifyToken, (req, res) => {
     const itemName = req.params.item_name;
 
     const sql = "DELETE FROM inventory WHERE item_name = ?";
